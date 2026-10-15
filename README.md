@@ -142,6 +142,9 @@ source and have no code here.
 - Paths are resolved relative to the working directory. A few comments still mention
   the original `C:\qruns\...` scratch location; those checkpoints now live under
   `chapter5_qmerge/SSO results/`.
+- Re-running a figure cell writes its PDF **next to the notebook**, not into
+  `figures/`. The `figures/` directories hold the versions used in the thesis, so
+  regenerating never silently overwrites them.
 
 ## Related publications
 
