@@ -1,3 +1,50 @@
+# =============================================================================
+#  SSO / MPS STAIRCASE STATE PREPARATION -- the core numerical stack
+# =============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  The Schmidt Spectrum Optimisation implementation (Green, Snow & Wang) that
+#  every preparation result in the thesis is built on, in both chapters. It is a
+#  verbatim extraction of the setup cell of the original working notebook, so
+#  that notebooks can import it rather than re-paste it.
+#
+#  WHAT SSO DOES
+#  -------------
+#  Represent the target as an MPS, then build L "staircase" layers of two-qubit
+#  SU(4) gates. Each layer is optimised to minimise
+#
+#      C = sum_i [ 1 - (lambda_{i,1})^2 - (lambda_{i,2})^2 ]
+#
+#  over the two largest Schmidt coefficients at every bond -- that is, each layer
+#  maximises the fidelity a chi = 2 encoding would achieve if you stopped there.
+#  After L layers the disentangled state IS well approximated by a chi = 2 MPS,
+#  which Ran's analytic construction encodes exactly in one more staircase.
+#  Inverting the whole sequence gives the preparation circuit:
+#
+#      U_S = U_1^dag U_2^dag ... U_L^dag U_prep
+#
+#  WHAT IS IN HERE
+#  ---------------
+#  - su2/su4/su8/su16 parametrisations (identity at zero parameters)
+#  - warm-start and cold SSO drivers
+#  - image <-> MPS conversion, chi-fidelity, replay/reconstruction helpers
+#  - the brickwall layer builders used for IPR preconditioning
+#
+#  Importing this module prints a block of self-check results (identity and
+#  unitarity assertions). That output is expected, not an error.
+#
+#  REQUIRES
+#  --------
+#  numpy, torch, scipy, quimb, qiskit, mps-to-circuit.  See requirements.txt --
+#  newer torch/quimb give a different optimiser trajectory, so fitted fidelities
+#  drift between environments even though the gate conversion is exact.
+#
+#  NOTE: sso_framework_setup.py is an earlier standalone copy of this same code.
+#  Both are kept because different notebooks import different ones.
+#
+# =============================================================================
+
 """sso_prep.py -- SSO / MPS staircase state-prep stack.
 Extracted verbatim from cell 0 of "Small R75 for hardware run.ipynb" so the
 multi-register notebook can reuse the row prep circuits. Do not edit here;

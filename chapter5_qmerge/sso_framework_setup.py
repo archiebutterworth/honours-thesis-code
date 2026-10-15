@@ -1,4 +1,23 @@
-﻿# =====================================================================
+﻿# =============================================================================
+#  SSO FRAMEWORK -- earlier standalone copy
+# =============================================================================
+#
+#  Functionally the same stack as sso_prep.py, extracted at an earlier point.
+#  Both are kept because different notebooks import different ones:
+#
+#      sso_prep.py            <- 01_qmerge_engine.ipynb, sso_rowprep.py
+#      sso_framework_setup.py <- 02_haar_scaling_sweep.ipynb,
+#                                supplementary/SU4 Reweighting POC.ipynb,
+#                                supplementary/IPR Reduction Ansatz Comparison.ipynb
+#
+#  If you are reading the method rather than running a notebook, read sso_prep.py
+#  -- it is the maintained one and carries the fuller header.
+#
+#  Importing this module prints its self-check output. That is expected.
+#
+# =============================================================================
+
+# =====================================================================
 #  SSO framework -- full setup in one cell.
 #  Paste into a single Jupyter cell and run once; defines everything the
 #  encoding notebooks use (warm-start + cold SSO drivers, image<->MPS,

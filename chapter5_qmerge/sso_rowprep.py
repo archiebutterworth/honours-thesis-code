@@ -1,3 +1,37 @@
+# =============================================================================
+#  SSO -> QISKIT ADAPTER -- segment preparation circuits for Q-MERGE
+# =============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  The bridge between the two halves of the Chapter 5 pipeline. sso_prep works in
+#  quimb tensor networks; mre_prep needs Qiskit circuits. This module runs SSO on
+#  a segment and emits a QuantumCircuit whose statevector equals that segment, to
+#  the SSO fidelity, in the SAME little-endian convention Qiskit's
+#  StatePreparation uses -- so the result drops straight into
+#  mre_prep.build_compression_circuit as a prep circuit.
+#
+#  THE CONVENTION (grid-searched against the row statevector, not guessed)
+#  ----------------------------------------------------------------------
+#    site i            ->  qiskit qubit (n - 1 - i)
+#    gates             ->  forward qubit order
+#    prep gates        ->  as returned by mps_to_circuit_quimb_warm
+#    layer gates       ->  tensor.reshape(N, N).conj(), applied in REVERSE order
+#                          after the analytic prep of the chi-truncated residual
+#
+#  WHY qc.unitary() AND NOT StatePreparation
+#  -----------------------------------------
+#  Gates are added with qc.unitary(...) so that when this circuit is composed into
+#  the multi-register circuit, the individual two-qubit staircase gates stay
+#  visible and get compiled individually. StatePreparation would collapse them
+#  into one opaque instruction and inflate the compiled gate count.
+#
+#  USED BY
+#  -------
+#  chapter5_qmerge/03_hardware_circuit_build.ipynb
+#
+# =============================================================================
+
 """sso_rowprep.py -- Qiskit staircase row-prep circuits from the SSO/MPS stack.
 
 Wraps `sso_prep` (the extracted disentangler + analytic MPS->circuit code) and emits a

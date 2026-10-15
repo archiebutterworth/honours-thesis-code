@@ -51,9 +51,10 @@ the thesis results; see the note at the top of that file about optimiser drift.
 | `00_sso_chi4_disentangler.ipynb` | SSO with the χ=4 disentangler (exploratory) |
 | `01_sso_preparation.ipynb` | The SSO/MPS state-preparation stack |
 | `02_tau_reducing_layer.ipynb` | IPR optimiser; builds the structured test states (sinusoidal wave packets, 1D MBL, 1D spinless Hubbard, 4×4 2D Heisenberg) and writes `tau_ipr_{before,after}.npy` |
-| `03_hardware_analysis.ipynb` | Compares noiseless / H2-1 emulator / H2-1 hardware shadow overlaps |
-| `04_tket_compilation.ipynb` | Compiles to the H2-1 native gate set (229 × 1-qubit `PhasedX`, 108 × 2-qubit `ZZPhase`) |
-| `05_figures.ipynb` | **Produces Figures 4.1–4.5** |
+| `03_tket_compilation.ipynb` | Compiles to the H2-1 native gate set (229 × 1-qubit `PhasedX`, 108 × 2-qubit `ZZPhase`) |
+| `04_hardware_submission_and_calibration.ipynb` | H2-1 job submission (needs an account) **and** the classical shadow-overlap calibration curve (runs anywhere) |
+| `05_hardware_analysis.ipynb` | Compares noiseless / H2-1 emulator / H2-1 hardware shadow overlaps |
+| `06_figures.ipynb` | **Produces Figures 4.1–4.5** |
 
 Data in the same directory: `shadow_results_{hardware,emulator}.pkl`,
 `shadow_results_noiseless.npy`, `shadows_vs_fidelity.npy`,
@@ -66,8 +67,9 @@ Data in the same directory: `shadow_results_{hardware,emulator}.pkl`,
 |---|---|
 | `01_qmerge_engine.ipynb` | The compute engine: per-segment SSO row sweeps, direct full-state encoding baselines, brickwall preconditioning, and the Stage-2 reweighting success-probability sweeps. This is what writes `SSO results/` and `results/`. Hours of CPU time. |
 | `02_haar_scaling_sweep.ipynb` | Reweighting success probability *P* vs *M* and *N* for Haar-random segments → `sweep_success_prob_*.csv` |
-| `03_hardware_circuit_build.ipynb` | Builds the 53-qubit Stage-1 circuit (4 preparation registers × 10 qubits, 10-qubit storage, 2 index qubits, 1 ancilla) and exports the `.qpy` artefacts. Despite the `TAG`, this is the 4 × 1024 run. |
-| `04_figures.ipynb` | **Produces Figures 3.1, 3.2, 5.3–5.7 and Table 5.1** |
+| `03_hardware_circuit_build.ipynb` | Builds the 53-qubit Stage-1 circuit (4 preparation registers × 10 qubits, 10-qubit storage, 2 index qubits, 1 ancilla) and exports the `.qpy` artefacts. Despite the filename, this is the 4 × 1024 run. |
+| `04_shadow_overlap_and_calibration.ipynb` | Per-branch shadow-overlap certification on H2-1 (needs an account) **and** the per-branch calibration curves, 9000 points each (runs anywhere) |
+| `05_figures.ipynb` | **Produces Figures 3.1, 3.2, 5.3–5.7 and Table 5.1** |
 
 Supporting modules, imported directly by the notebooks:
 
@@ -105,18 +107,25 @@ schematic diagram script.
 
 | Thesis figure | Notebook (cell) | Principal inputs |
 |---|---|---|
-| 3.1 — MPS and TTN structures | `chapter5_qmerge/04_figures.ipynb` (13) | none (schematic) |
-| 3.2 — direct encoding fails on 32 × 1024 | `chapter5_qmerge/04_figures.ipynb` (18) | `SSO results/fullstate_R75x4_M32/checkpoint.npz` |
-| 4.1 — SSO staircase + τ reducing layer | `chapter4_certification/05_figures.ipynb` (8) | none (schematic) |
-| 4.2 — acoustic signal before/after basis change | `chapter4_certification/05_figures.ipynb` (5, 6) | KZB gate list, inlined in cell 1 |
-| 4.3 — shadow overlap vs fidelity | `chapter4_certification/05_figures.ipynb` (18) | `shadows_vs_fidelity.npy` |
-| 4.4 — shadow overlap histograms | `chapter4_certification/05_figures.ipynb` (13) | `shadow_results_{hardware,emulator}.pkl`, `shadow_results_noiseless.npy` |
-| 4.5 — τ vs IPR, before and after | `chapter4_certification/05_figures.ipynb` (22) | `tau_ipr_{before,after}.npy` |
-| 5.3 — the ultrasound dataset | `chapter5_qmerge/04_figures.ipynb` (17) | `R75 Ultrasound data.xlsx` |
-| 5.4 — infidelity vs CNOT depth and CPU time | `chapter5_qmerge/04_figures.ipynb` (20) | `SSO results/row_sweep_*`, `fullstate_R75x4_M32` |
-| 5.5 — reweighting success probability | `chapter5_qmerge/04_figures.ipynb` (16) | `results/v_R75x4_M32_incr.pkl` |
-| 5.6 + Table 5.1 — per-branch H2-1 results | `chapter5_qmerge/04_figures.ipynb` (10) | `shadow_branch_hw_4x1024_L1_mid.pkl`, calibration `.npz` |
-| 5.7 — *P* vs *M* for Haar-random segments | `chapter5_qmerge/04_figures.ipynb` (12) | `sweep_success_prob_vs_M.csv` |
+| 3.1 — MPS and TTN structures | `chapter5_qmerge/05_figures.ipynb` (14) | none (schematic) |
+| 3.2 — direct encoding fails on 32 × 1024 | `chapter5_qmerge/05_figures.ipynb` (19) | `SSO results/fullstate_R75x4_M32/checkpoint.npz` |
+| 4.1 — SSO staircase + τ reducing layer | `chapter4_certification/06_figures.ipynb` (9) | none (schematic) |
+| 4.2 — acoustic signal before/after basis change | `chapter4_certification/06_figures.ipynb` (7) | KZB gate list, inlined in cell 2 |
+| 4.3 — shadow overlap vs fidelity | `chapter4_certification/06_figures.ipynb` (19) | `shadows_vs_fidelity.npy` |
+| 4.4 — shadow overlap histograms | `chapter4_certification/06_figures.ipynb` (14) | `shadow_results_{hardware,emulator}.pkl`, `shadow_results_noiseless.npy` |
+| 4.5 — τ vs IPR, before and after | `chapter4_certification/06_figures.ipynb` (23) | `tau_ipr_{before,after}.npy` |
+| 5.3 — the ultrasound dataset | `chapter5_qmerge/05_figures.ipynb` (18) | `R75 Ultrasound data.xlsx` |
+| 5.4 — infidelity vs CNOT depth and CPU time | `chapter5_qmerge/05_figures.ipynb` (21) | `SSO results/row_sweep_*`, `fullstate_R75x4_M32` |
+| 5.5 — reweighting success probability | `chapter5_qmerge/05_figures.ipynb` (17) | `results/v_R75x4_M32_incr.pkl` |
+| 5.6 + Table 5.1 — per-branch H2-1 results | `chapter5_qmerge/05_figures.ipynb` (11) | `shadow_branch_hw_4x1024_L1_mid.pkl`, calibration `.npz` |
+| 5.7 — *P* vs *M* for Haar-random segments | `chapter5_qmerge/05_figures.ipynb` (13) | `sweep_success_prob_vs_M.csv` |
+
+Calibration curves — the `(ω, F)` scatters that convert a measured shadow overlap
+into a fidelity — are generated by
+`chapter4_certification/04_hardware_submission_and_calibration.ipynb` (cell 208, for
+the 13-qubit acoustic target) and
+`chapter5_qmerge/04_shadow_overlap_and_calibration.ipynb` (cell 79 for the 4 × 1024
+branches, cell 68 for the earlier 4 × 32 run). Both run without a Quantinuum account.
 
 Figures 5.1 and 5.2 (the Q-MERGE circuit diagrams) are drawn in LaTeX in the thesis
 source and have no code here.
@@ -125,20 +134,31 @@ source and have no code here.
 
 | Result | Where |
 |---|---|
-| Q-MERGE infidelity 3.5 × 10⁻⁹ vs 6.2 × 10⁻³ direct | `chapter5_qmerge/04_figures.ipynb`, cell 20 |
-| Preconditioning raises *P* from 0.0098 to 0.3170 | `chapter5_qmerge/04_figures.ipynb`, cell 16 |
-| Weighted branch fidelity 0.7135 ± 0.0720 on H2-1 | `chapter5_qmerge/04_figures.ipynb`, cell 10 |
+| Q-MERGE infidelity 3.5 × 10⁻⁹ vs 6.2 × 10⁻³ direct | `chapter5_qmerge/05_figures.ipynb`, cell 21 |
+| Preconditioning raises *P* from 0.0098 to 0.3170 | `chapter5_qmerge/05_figures.ipynb`, cell 17 |
+| Weighted branch fidelity 0.7135 ± 0.0720 on H2-1 | `chapter5_qmerge/05_figures.ipynb`, cell 11 |
+| *P* > 5 % out to *M* = 10⁷ | `chapter5_qmerge/05_figures.ipynb`, cell 13 |
 | τ reduced 447.29 → 17.49 for the acoustic target | `chapter4_certification/02_tau_reducing_layer.ipynb` |
-| *F*_SSO = 0.9959, *F*_hw ≈ 0.91 | `chapter4_certification/05_figures.ipynb` |
+| *F*_SSO = 0.9959, *F*_hw ≈ 0.91 | `chapter4_certification/06_figures.ipynb` |
 
 ## Notes
 
-- **Quantinuum submission code is not included.** The notebooks that submitted jobs
-  to H2-1 required account credentials and are omitted. Everything they produced is
-  committed as raw data, so all analysis and plotting reproduces without machine
-  access.
+- **No credentials are stored here.** The two notebooks that submit jobs to H2-1
+  read `QNX_USER` and `QNX_PASS` from the environment:
+
+  ```bash
+  export QNX_USER="you@example.com"
+  export QNX_PASS="..."
+  ```
+
+  Only the submission cells need them. The calibration simulations, all analysis and
+  all plotting run offline from the committed result files, so **every figure in the
+  thesis reproduces without a Quantinuum account.**
 - Notebooks are committed **with their outputs** so the results are readable on
   GitHub without running anything.
+- Every notebook opens with a header cell explaining what it does, what it consumes
+  and what it writes. Cell numbers quoted in this README and in those headers are
+  0-indexed and include that header cell.
 - Paths are resolved relative to the working directory. A few comments still mention
   the original `C:\qruns\...` scratch location; those checkpoints now live under
   `chapter5_qmerge/SSO results/`.

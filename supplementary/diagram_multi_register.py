@@ -1,3 +1,18 @@
+# =============================================================================
+#  SCHEMATIC -- hub-and-spoke illustration of multi-register encoding
+# =============================================================================
+#
+#  A presentation figure, not a thesis figure: M loading registers arranged around
+#  a central storage+index register, with circular flow arrows and a protocol
+#  flowchart sidebar. Written for talks and the poster.
+#
+#  The thesis circuit diagrams (Figs. 5.1 and 5.2) are drawn in LaTeX/quantikz in
+#  the thesis source instead, and are not produced by this script.
+#
+#  Standalone -- needs only numpy and matplotlib. Run it directly.
+#
+# =============================================================================
+
 """
 Multi-Register Quantum Encoding Diagram
 ========================================

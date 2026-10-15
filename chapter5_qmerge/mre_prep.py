@@ -1,3 +1,44 @@
+# =============================================================================
+#  Q-MERGE STAGE 1 -- preparation and SELECT-SWAP compression
+# =============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  The circuit-construction half of Q-MERGE. Given M normalised segments
+#  |psi_i> in C^N, it builds the Qiskit circuit that prepares them on separate
+#  registers and compresses them onto a shared storage+index register.
+#
+#  THE PROTOCOL (thesis Sec. 5.1.1)
+#  --------------------------------
+#    1. Prepare |psi_i> on preparation register A_i, all in parallel.
+#    2. Put storage S and index I into uniform superposition.
+#    3. Apply SELECT-SWAP:  sum_i |i><i|_I (x) SWAP(A_i, S)
+#    4. Measure every A_i in the computational basis, outcome u.
+#
+#  This collapses deterministically onto the "weighted stack"
+#
+#      |psi_w> = (1/sqrt(Norm)) sum_i w_i |psi_i>_S |i>_I ,
+#      w_i = prod_{k != i} (psi_k)_{u_k}
+#
+#  i.e. branch i picks up the product of the u_k-th amplitudes of all the OTHER
+#  segments. Stage 1 never fails; the randomness lands entirely in the weights,
+#  which Stage 2 then corrects.
+#
+#  CONVENTIONS THAT MATTER
+#  -----------------------
+#  Qiskit little-endian within each register, and register order low -> high is
+#  S, I, A_0, ..., A_{M-1}, [anc]. Storage+index therefore occupy the lowest
+#  (n+m) qubits as a contiguous block, which is what makes
+#  full_index = si + prep * 2**(n+m) work. Get this wrong and the smoke tests in
+#  03_hardware_circuit_build.ipynb fail loudly -- which is what they are for.
+#
+#  USED BY
+#  -------
+#  chapter5_qmerge/03_hardware_circuit_build.ipynb   (the 53-qubit H2-1 circuit)
+#  supplementary/Multi-register compression (4x32).ipynb
+#
+# =============================================================================
+
 """mre_prep.py -- Multi-register CSWAP-compression state preparation (Stage 1).
 
 Implements the Stage-1 "preparation and compression" of the paper *Parallelism of
