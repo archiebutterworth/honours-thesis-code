@@ -84,7 +84,7 @@ Data, all in `chapter5_qmerge/`:
 
 | Path | Contents |
 |---|---|
-| `R75 Ultrasound data.xlsx` | The 32 × 1024 ultrasound dataset (upsampled to 128 × 1024 in the M=32 analysis) |
+| `R75 Ultrasound data.xlsx` | Raw ultrasound data: 382 samples × 128 detector elements. The analysis resamples the sample axis to N = 1024 (amplitude encoding needs a power of two) and takes the middle M = 32 of the 128 registers, giving the 32 × 1024 target state. |
 | `SSO results/row_sweep_*/` | Per-segment SSO fidelities vs staircase depth (`row_fids.json`, `row_states.npz`, `sigma.npy`) |
 | `SSO results/fullstate_*/` | Direct whole-state encoding baselines (`checkpoint.npz`) |
 | `results/v_R75x4_M32_incr.pkl` | 5000 simulated Stage-1 measurement outcomes, baseline and preconditioned (Figure 5.5) |
